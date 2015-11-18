@@ -6,7 +6,7 @@
  *Author: jusonalien
  *Email:  jusonalien@qq.com or jusonalien@gmail.com
  *
- *Description: A not efficient & naive implementation of B-Plus-Tree
+ *Description: A NOT efficient & naive implementation of B-Plus-Tree
  *              which is described in the <<Database System Concept>> 6th Edition
  *Reference:
  *      https://github.com/ghostrong/algorithm/blob/master/bptree_v2.c
