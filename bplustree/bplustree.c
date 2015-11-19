@@ -7,7 +7,7 @@
  *Author: jusonalien
  *Email:  jusonalien@qq.com or jusonalien@gmail.com
  *
- *Description: A NOT efficient && naive implementation of B-Plus-Tree data structure
+ *Description: A not efficient && naive implementation of B-Plus-Tree data structure
  *             which is described in the <<Database System Concept>> 6th Edition
                Chapter 11.3 B+-Tree Index Files
  *Reference:
@@ -36,8 +36,8 @@ search_leaf(bptree_node *root, int key)
         return root;
     result = root;
     while (result->isLeaf != BPLUS_TREE_LEAF) {
-        for (i = 0; i < result->num_keys && key >= result->key[i]; ++i) // be careful of here!
-            ;
+        for (i = 0; i < result->num_keys && key >= result->key[i]; ++i) ;
+
         result = result->pointers[i];
     }
     return (bptree_node *) result;
@@ -191,7 +191,6 @@ insert_in_leaf(bptree_node *leaf, int key, file_record *rec)
     leaf->key[tags] = key;
     leaf->pointers[tags] = rec;
     leaf->num_keys++;
-    //leaf->num_ptrs++;
     return;
 }
 
@@ -220,16 +219,15 @@ insert_in_node(bptree_node *p, bptree_node *c, int key, int index)
 bptree_node *
 insert_in_parent(bptree_node *root, bptree_node *n, int keyp, bptree_node *np)
 {
-    //if (n->parent == NULL) {
+
     if (LEAF_IS_NODE(n)) {
-        return new_root(n, np, keyp); // may be should be rewritten
+        return new_root(n, np, keyp);
     }
 
     bptree_node *parent = n->parent;
     int index, i;
     for (index = 0; index < parent->num_keys && parent->key[index] < keyp; ++index)
         ;
-    //if (parent->num_keys < MAX_SIZE - 1) { //take care~  P has less than MAX_SIZE pointer
     if (NON_LEAF_NODE_IS_NOT_FULL(parent)) {
         insert_in_node(parent, np, keyp, index);
         return root;
@@ -295,7 +293,7 @@ insert(bptree_node *root, int key, int value)
     leaf = search_leaf(root, key);
 
 
-    if (!leaf) { // cannot find the leaf, so the tree is empty
+    if (!leaf) {
         return new_tree(key, rec);
     }
 
@@ -346,4 +344,23 @@ insert(bptree_node *root, int key, int value)
     }
 }
 
-
+void
+delete_bptree_node(bptree_node* root,int key)
+{
+    bptree_node* leaf = search_leaf(root, key);
+    if (leaf == NULL) {
+        printf("this node is not existed\n");
+        return ;
+    }
+    int i;
+    /*we can use binary search for more efficiency*/
+    for (i = 0; i < leaf->num_keys && key != leaf->key[i]; ++i)
+        ;
+    if (i == leaf->num_keys) {
+        printf("this node is not existed \n");
+        return ;
+    }
+    leaf->key[i] = -1;
+    free(leaf->pointers[i]);
+    //return (file_record *) leaf->pointers[i];
+}
