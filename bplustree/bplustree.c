@@ -220,7 +220,7 @@ bptree_node *
 insert_in_parent(bptree_node *root, bptree_node *n, int keyp, bptree_node *np)
 {
 
-    if (LEAF_IS_NODE(n)) {
+    if (NODE_IS_ROOT(n)) {
         return new_root(n, np, keyp);
     }
 
@@ -344,16 +344,56 @@ insert(bptree_node *root, int key, int value)
     }
 }
 
-
 void
-delete_btree_node(btree_node* root, int key)
+delete_a_leaf(bptree_node* node, int key)
 {
+    int i;
+    for (i = 0;i < node->num_keys;++i) {
+        if (node->key[i] == key) {
+            free(node->pointers[i]);
+            break;
+        }
+    }
+    for (;i < node->num_keys - 1;++i) {
+        node->key[i] = node->key[i + 1];
+        node->pointers[i] = node->pointers[i + 1];
+    }
+    node->num_keys--;
 
-    
+    return ;
 }
-/*
+
+bptree_node*
+delete_entry(bptree_node* leaf, int key, bptree_node* root)
+{
+    bptree_node* parent = leaf->parent;
+    delete_a_leaf(parent, key);
+    if (NODE_IS_ROOT(parent) && (parent->num_keys == 1)) {
+        /*Then make the child of parent the new root of the tree*/
+
+    }
+    else {
+
+    }
+}
+
 void
-delete_bptree_node(bptree_node* root,int key)
+delete_btree_node(bptree_node* root, int key)
+{
+    bptree_node* leaf = search(root, key);
+    if (leaf == NULL) {
+        printf("Doesn't contain %d key",key);
+        return ;
+    }
+
+    delete_entry(leaf, key, root);
+    return ;
+}
+
+
+
+void
+delete_bptree_node_without_modif(bptree_node* root,int key)
 {
     bptree_node* leaf = search_leaf(root, key);
     if (leaf == NULL) {
@@ -361,7 +401,7 @@ delete_bptree_node(bptree_node* root,int key)
         return ;
     }
     int i;
-    /*we can use binary search for more efficiency*/
+    //we can use binary search for more efficiency
     for (i = 0; i < leaf->num_keys && key != leaf->key[i]; ++i)
         ;
     if (i == leaf->num_keys) {
@@ -372,6 +412,6 @@ delete_bptree_node(bptree_node* root,int key)
     free(leaf->pointers[i]);
     //return (file_record *) leaf->pointers[i];
 }
-*/
+
 
 
