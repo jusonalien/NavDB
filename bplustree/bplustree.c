@@ -363,21 +363,44 @@ delete_a_leaf(bptree_node* node, int key)
     return ;
 }
 
+
+/*
+bptree_node *
+new_tree(int key, file_record *rec)
+{
+    bptree_node *root;
+    root = new_leaf();
+    root->pointers[0] = rec;
+    root->key[0] = key;
+    root->pointers[MAX_SIZE - 1] = NULL;
+    root->num_keys++;
+    return root;
+}
+ */
+
 bptree_node*
 delete_entry(bptree_node* leaf, int key, bptree_node* root)
 {
     bptree_node* parent = leaf->parent;
     delete_a_leaf(parent, key);
     if (NODE_IS_ROOT(parent) && (parent->num_keys == 1)) {
-        /*Then make the child of parent the new root of the tree*/
 
+        /*
+         * Then make the child of parent the new root of the tree
+         * meaning that the tree is empty. return a new tree without
+         * any keys and pointers.
+         */
+
+        bptree_node* new_root;
+        new_root = new_tree(-1, NULL);
+        return new_root;
     }
     else {
 
     }
 }
 
-void
+bptree_node*
 delete_btree_node(bptree_node* root, int key)
 {
     bptree_node* leaf = search(root, key);
