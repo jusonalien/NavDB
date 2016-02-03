@@ -32,6 +32,20 @@
 
 // typedef struct bptree_node bptree_node;
 
+
+#define OFFSETOF(type, member) (size_t)&(((type *)0)->member)
+
+#define container_of(ptr, type, member) ({                     \
+		const typeof( ((type *)0)->member ) *__mptr = (ptr);   \
+		(type *)( (char *)__mptr - OFFSETOF(type, member) );})
+
+
+#define bptnode_entry(ptr, type, member)                       \
+		container_of(ptr, type, member)
+
+
+
+
 typedef struct bptree_node {
 
     int* key;
@@ -50,31 +64,20 @@ typedef struct file_record {
 
 #define NON_LEAF_NODE_IS_NOT_FULL(node)  ( (node)->num_keys < (MAX_SIZE - 1) )
 #define NODE_IS_ROOT(node) ((node)->parent == NULL)
-/*
+
 bptree_node* search_leaf(bptree_node *root, int key);
 
-file_record *search(bptree_node* root, int key);
-file_record*
-        new_file_record(int value);
-bptree_node*
-        new_bptree_node();
-bptree_node*
-        new_leaf();
-bptree_node*
-        new_tree(int key, file_record *rec);
-void
-        destory_tree(bptree_node* root);
-bptree_node*
-        new_root(bptree_node* left, bptree_node* right, int key);
-void
-        insert_in_leaf(bptree_node* leaf, int key, file_record* rec);
-void
-        insert_in_node(bptree_node* p,bptree_node* c, int key, int index);
-bptree_node*
-        insert_in_parent(bptree_node* root, bptree_node* n, int keyp, bptree_node* np);
-bptree_node*
-        insert(bptree_node* root, int key, int value)
+file_record* search(bptree_node* root, int key);
+file_record* new_file_record(int value);
+bptree_node* new_bptree_node();
+bptree_node* new_leaf();
+bptree_node* new_tree(int key, file_record *rec);
+bptree_node* new_root(bptree_node* left, bptree_node* right, int key);
+bptree_node* insert_in_node(bptree_node* p,bptree_node* c, int key, int index);
+bptree_node* insert_in_parent(bptree_node* root, bptree_node* n, int keyp, bptree_node* np);
+bptree_node* insert(bptree_node* root, int key, int value);
+void 		 insert_in_leaf(bptree_node* leaf, int key, file_record* rec);
+void		 destory_tree(bptree_node* root);
 
-*/
 
 #endif //BPLUSTREE_BPLUSTREE_H
