@@ -49,7 +49,7 @@ typedef struct file_record {
 } file_record;
 
 #define NON_LEAF_NODE_IS_NOT_FULL(node)  ( (node)->num_keys < (MAX_SIZE - 1) )
-#define LEAF_IS_NODE(node) ((node)->parent == NULL)
+#define NODE_IS_ROOT(node) ((node)->parent == NULL)
 /*
 bptree_node* search_leaf(bptree_node *root, int key);
 
